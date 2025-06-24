@@ -1,6 +1,7 @@
 package cn.anecansaitin.freecameraapiaddition.network;
 
-import cn.anecansaitin.freecameraapiaddition.CameraTicketController;
+import cn.anecansaitin.freecameraapiaddition.CameraAdditionConfig;
+import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraTicketController;
 import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
 import cn.anecansaitin.freecameraapiaddition.attachment.CameraData;
 import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;
@@ -10,15 +11,15 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record CameraView(int x, int z, int radius) implements CustomPacketPayload {
+public record CameraView(int x, int z) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<CameraView> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(FreeCameraApiAddition.MODID, "camera_radius"));
     public static final StreamCodec<ByteBuf, CameraView> CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, pack -> pack.x,
             ByteBufCodecs.VAR_INT, pack -> pack.z,
-            ByteBufCodecs.VAR_INT, pack -> pack.radius,
             CameraView::new
     );
 
@@ -30,20 +31,20 @@ public record CameraView(int x, int z, int radius) implements CustomPacketPayloa
     public static void handle(CameraView pack, IPayloadContext context) {
         Player player = context.player();
         CameraData data = player.getData(ModAttachment.CAMERA_DATA);
-        boolean updateView = data.updateView(pack.x, pack.z, pack.radius);
+        int radius = CameraAdditionConfig.cameraChunkLoadRadius((ServerPlayer) player);
+        boolean updateView = data.updateView(pack.x, pack.z, radius);
 
         if (updateView) {
-            int currentX = data.currentView.x();
-            int currentZ = data.currentView.z();
-            int currentRadius = pack.radius;
+            int currentX = data.view.x();
+            int currentZ = data.view.z();
 
-            int currentMinX = currentX - currentRadius;
-            int currentMaxX = currentX + currentRadius;
-            int currentMinZ = currentZ - currentRadius;
-            int currentMaxZ = currentZ + currentRadius;
+            int minX = currentX - radius;
+            int maxX = currentX + radius;
+            int minZ = currentZ - radius;
+            int maxZ = currentZ + radius;
 
-            for (int x = currentMinX; x <= currentMaxX; x++) {
-                for (int z = currentMinZ; z <= currentMaxZ; z++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
                     CameraTicketController.addChunk((ServerLevel) player.level(), player, x, z);
                 }
             }

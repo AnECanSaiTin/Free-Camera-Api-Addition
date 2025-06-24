@@ -4,6 +4,9 @@ import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(FreeCameraApiAddition.MODID)
 public class FreeCameraApiAddition {
@@ -11,5 +14,7 @@ public class FreeCameraApiAddition {
 
     public FreeCameraApiAddition(IEventBus modEventBus, ModContainer modContainer) {
         ModAttachment.ATTACHMENT_TYPES.register(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CameraAdditionConfig.SPEC);
+        modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 }

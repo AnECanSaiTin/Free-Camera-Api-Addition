@@ -1,6 +1,6 @@
 package cn.anecansaitin.freecameraapiaddition.mixin;
 
-import cn.anecansaitin.freecameraapiaddition.CameraChunkLoader;
+import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraChunkLoader;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;

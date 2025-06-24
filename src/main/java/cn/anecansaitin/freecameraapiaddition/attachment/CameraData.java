@@ -11,7 +11,7 @@ public class CameraData {
     public float x;
     public float y;
     public float z;
-    public CameraChunkTrackingView currentView = new CameraChunkTrackingView(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
+    public CameraChunkTrackingView view = new CameraChunkTrackingView(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
 
     public void updateState(boolean enable, boolean update) {
         this.enable = enable;
@@ -25,11 +25,11 @@ public class CameraData {
     }
 
     public boolean updateView(int x, int z, int radius) {
-        if (currentView.x - x + currentView.z - z == 0) {
+        if (view.x - x + view.z - z == 0) {
             return false;
         }
 
-        currentView = new CameraChunkTrackingView(x, z, radius);
+        view = new CameraChunkTrackingView(x, z, radius);
         update = true;
         return true;
     }

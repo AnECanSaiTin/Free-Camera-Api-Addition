@@ -39,7 +39,7 @@ public abstract class ChunkMapMixin {
             return;
         }
 
-        ChunkTrackingView.difference(player.getChunkTrackingView(), data.currentView, chunkPos -> markChunkPendingToSend(player, chunkPos), chunkPos -> {});
+        ChunkTrackingView.difference(player.getChunkTrackingView(), data.view, chunkPos -> markChunkPendingToSend(player, chunkPos), chunkPos -> {});
         data.update = false;
     }
 
@@ -56,7 +56,7 @@ public abstract class ChunkMapMixin {
             return false;
         }
 
-        return data.currentView.contains(pos);
+        return data.view.contains(pos);
     }
 
     @Inject(method = "isChunkTracked", at = @At("HEAD"), cancellable = true)
@@ -64,7 +64,7 @@ public abstract class ChunkMapMixin {
         // 让相机范围内区块保持更新
         CameraData data = player.getData(ModAttachment.CAMERA_DATA);
 
-        if (!data.enable || !data.currentView.contains(x, z)) {
+        if (!data.enable || !data.view.contains(x, z)) {
             return;
         }
 
@@ -78,7 +78,7 @@ public abstract class ChunkMapMixin {
         // 确保玩家在相机范围内区块不被丢弃
         CameraData data = player.getData(ModAttachment.CAMERA_DATA);
 
-        if (!data.enable || !data.currentView.contains(pos)) {
+        if (!data.enable || !data.view.contains(pos)) {
             return;
         }
 

@@ -1,6 +1,6 @@
 package cn.anecansaitin.freecameraapiaddition.network;
 
-import cn.anecansaitin.freecameraapiaddition.CameraTicketController;
+import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraTicketController;
 import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
 import cn.anecansaitin.freecameraapiaddition.attachment.CameraData;
 import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;

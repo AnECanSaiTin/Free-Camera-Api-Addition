@@ -1,6 +1,7 @@
 package cn.anecansaitin.freecameraapiaddition.mixin;
 
-import cn.anecansaitin.freecameraapiaddition.CameraChunkLoader;
+import cn.anecansaitin.freecameraapiaddition.CameraAdditionConfig;
+import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraChunkLoader;
 import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,9 +48,9 @@ public abstract class ClientChunkCacheMixin {
     }
 
     @Inject(method = "updateViewRadius", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientChunkCache$Storage;<init>(Lnet/minecraft/client/multiplayer/ClientChunkCache;I)V"))
-    public void freeCameraAPI$onUpdateViewRadius(int viewDistance, CallbackInfo ci) {
+    public void freeCameraAPI$updateViewRadius(int viewDistance, CallbackInfo ci) {
         // 可视范围更新时，同步更新相机的storage
-        ClientChunkCache.Storage storage = self().new Storage(Math.max(2, viewDistance) + 3);
+        ClientChunkCache.Storage storage = self().new Storage(CameraAdditionConfig.cameraChunkLoadRadius(viewDistance) + 3);
         ClientChunkCache.Storage cameraStorage = CameraChunkLoader.INSTANCE.cameraStorage();
         storage.viewCenterX = cameraStorage.viewCenterX;
         storage.viewCenterZ = cameraStorage.viewCenterZ;

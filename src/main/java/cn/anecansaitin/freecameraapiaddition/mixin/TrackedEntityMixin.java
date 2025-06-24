@@ -1,6 +1,6 @@
 package cn.anecansaitin.freecameraapiaddition.mixin;
 
-import cn.anecansaitin.freecameraapiaddition.CameraChunkLoader;
+import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraChunkLoader;
 import cn.anecansaitin.freecameraapiaddition.attachment.CameraData;
 import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;
 import com.llamalad7.mixinextras.sugar.Local;

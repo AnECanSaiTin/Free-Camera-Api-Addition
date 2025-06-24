@@ -1,6 +1,7 @@
-package cn.anecansaitin.freecameraapiaddition;
+package cn.anecansaitin.freecameraapiaddition.core.chunk_loader;
 
 import cn.anecansaitin.freecameraapi.core.ModifierManager;
+import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
 import cn.anecansaitin.freecameraapiaddition.network.CameraPos;
 import cn.anecansaitin.freecameraapiaddition.network.CameraState;
 import cn.anecansaitin.freecameraapiaddition.network.CameraView;
@@ -18,8 +19,6 @@ import static cn.anecansaitin.freecameraapi.core.ModifierStates.*;
 public class CameraChunkLoader {
     public static final CameraChunkLoader INSTANCE = new CameraChunkLoader();
     private ClientChunkCache.Storage cameraStorage;
-    // todo 临时半径
-    private int radius = 2;
     private boolean chunkLoaderPrepared;
 
     public ClientChunkCache.Storage cameraStorage() {
@@ -54,7 +53,7 @@ public class CameraChunkLoader {
             PacketDistributor.sendToServer(
                     new CameraState(true, true),
                     new CameraPos(pos.x, pos.y, pos.z),
-                    new CameraView(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z), radius)
+                    new CameraView(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z))
             );
             chunkLoaderPrepared = true;
             return;
@@ -72,7 +71,7 @@ public class CameraChunkLoader {
 
         cameraStorage.viewCenterX = nvx;
         cameraStorage.viewCenterZ = nvz;
-        PacketDistributor.sendToServer(new CameraView(nvx, nvz, radius));
+        PacketDistributor.sendToServer(new CameraView(nvx, nvz));
     }
 
     @SubscribeEvent
