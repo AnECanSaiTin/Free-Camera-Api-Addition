@@ -3,7 +3,7 @@ package cn.anecansaitin.freecameraapiaddition;
 import cn.anecansaitin.freecameraapi.api.CameraPlugin;
 import cn.anecansaitin.freecameraapi.api.ICameraPlugin;
 import cn.anecansaitin.freecameraapi.api.ICameraModifier;
-import cn.anecansaitin.freecameraapi.core.ModifierPriority;
+import cn.anecansaitin.freecameraapi.api.ModifierPriority;
 
 @CameraPlugin(value = "example", priority = ModifierPriority.LOWEST)
 public class ExamplePlugin implements ICameraPlugin {
