@@ -12,9 +12,7 @@ public class ModPayload {
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1.0.0");
         registrar
-                .optional()
-                .playToServer(CameraPoseUpdate.TYPE, CameraPoseUpdate.CODEC, CameraPoseUpdate::handle)
-                /*.playToServer(
+                .playToServer(
                         CameraState.TYPE,
                         CameraState.CODEC,
                         CameraState::handle
@@ -24,15 +22,10 @@ public class ModPayload {
                         CameraPos.CODEC,
                         CameraPos::handle
                 )
-                .playToClient(
-                        CameraEnable.TYPE,
-                        CameraEnable.CODEC,
-                        CameraEnable::handle
-                )
-                .playToClient(
-                        CameraDisable.TYPE,
-                        CameraDisable.CODEC,
-                        CameraDisable::handle
-                )*/;
+                .playToServer(
+                        CameraView.TYPE,
+                        CameraView.CODEC,
+                        CameraView::handle
+                );
     }
 }

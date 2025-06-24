@@ -1,11 +1,14 @@
 package cn.anecansaitin.freecameraapiaddition.network;
 
 import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
+import cn.anecansaitin.freecameraapiaddition.attachment.CameraData;
+import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CameraPos(float x, float y, float z) implements CustomPacketPayload {
@@ -22,6 +25,8 @@ public record CameraPos(float x, float y, float z) implements CustomPacketPayloa
     }
 
     public static void handle(CameraPos pack, IPayloadContext context) {
-
+        Player player = context.player();
+        CameraData data = player.getData(ModAttachment.CAMERA_DATA);
+        data.updatePos(pack.x, pack.y, pack.z);
     }
 }

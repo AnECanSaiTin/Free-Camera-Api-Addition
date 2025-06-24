@@ -1,6 +1,5 @@
 package cn.anecansaitin.freecameraapiaddition.attachment;
 
-import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ChunkTrackingView;
 import net.minecraft.world.level.ChunkPos;
 
@@ -13,38 +12,26 @@ public class CameraData {
     public float y;
     public float z;
     public CameraChunkTrackingView currentView = new CameraChunkTrackingView(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
-    public CameraChunkTrackingView oldView = currentView;
 
-    public boolean update(boolean enable, boolean update, float x, float y, float z, int radius) {
+    public void updateState(boolean enable, boolean update) {
         this.enable = enable;
-
-        if (!enable) {
-            return false;
-        }
-
         this.update = update;
+    }
+
+    public void updatePos(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
-
-        if (!update) {
-            return false;
-        }
-
-        int newX = SectionPos.blockToSectionCoord(x);
-        int newZ = SectionPos.blockToSectionCoord(z);
-
-        if (currentView.x - newX + currentView.z - newZ == 0) {
-            return false;
-        }
-
-        updateView(newX, newZ, radius);
-        return true;
     }
 
-    public void updateView(int x, int z, int radius) {
-        oldView = currentView;
+    public boolean updateView(int x, int z, int radius) {
+        if (currentView.x - x + currentView.z - z == 0) {
+            return false;
+        }
+
         currentView = new CameraChunkTrackingView(x, z, radius);
+        update = true;
+        return true;
     }
 
     public record CameraChunkTrackingView(int x, int z, int radius) implements ChunkTrackingView {

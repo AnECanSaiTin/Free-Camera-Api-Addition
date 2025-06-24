@@ -39,8 +39,7 @@ public abstract class ChunkMapMixin {
             return;
         }
 
-        ChunkTrackingView.difference(player.getChunkTrackingView(), data.currentView, chunkPos -> markChunkPendingToSend(player, chunkPos), chunkPos -> {
-        });
+        ChunkTrackingView.difference(player.getChunkTrackingView(), data.currentView, chunkPos -> markChunkPendingToSend(player, chunkPos), chunkPos -> {});
         data.update = false;
     }
 
