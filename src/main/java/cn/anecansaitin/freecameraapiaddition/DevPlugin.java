@@ -5,8 +5,8 @@ import cn.anecansaitin.freecameraapi.api.ICameraPlugin;
 import cn.anecansaitin.freecameraapi.api.ICameraModifier;
 import cn.anecansaitin.freecameraapi.api.ModifierPriority;
 
-@CameraPlugin(value = "test", priority = ModifierPriority.LOWEST)
-public class TestPlugin implements ICameraPlugin {
+@CameraPlugin(value = "dev", priority = ModifierPriority.LOWEST)
+public class DevPlugin implements ICameraPlugin {
     private ICameraModifier modifier;
 
     @Override
@@ -23,7 +23,7 @@ public class TestPlugin implements ICameraPlugin {
     public void update() {
         modifier
                 .disable()
-                .setPos(-10, 64, -314)
+                .setPos(-100, 80, -314)
                 .setRotationYXZ(90, 180, 0);
     }
 }

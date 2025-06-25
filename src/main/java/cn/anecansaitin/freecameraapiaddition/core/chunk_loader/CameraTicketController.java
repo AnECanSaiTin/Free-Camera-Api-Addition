@@ -3,37 +3,51 @@ package cn.anecansaitin.freecameraapiaddition.core.chunk_loader;
 import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.common.world.chunk.TicketController;
-import net.neoforged.neoforge.common.world.chunk.TicketHelper;
 
-import java.util.UUID;
+import java.util.*;
 
 @EventBusSubscriber(modid = FreeCameraApiAddition.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class CameraTicketController {
     public static final TicketController TICKET_CONTROLLER = new TicketController(ResourceLocation.fromNamespaceAndPath(FreeCameraApiAddition.MODID, "camera_chunk"), (level, helper) -> {
-        ticketHelper = helper;
-
         for (UUID uuid : helper.getEntityTickets().keySet()) {
             helper.removeAllTickets(uuid);
         }
     });
 
-    public static TicketHelper ticketHelper;
+    private static final Map<UUID, Set<ChunkPos>> ENTITY_TICKETS = new HashMap<>();
 
     @SubscribeEvent
     public static void register(RegisterTicketControllersEvent event) {
         event.register(TICKET_CONTROLLER);
     }
 
-    public static void addChunk(ServerLevel level, Entity owner, int x, int y) {
-        TICKET_CONTROLLER.forceChunk(level, owner, x, y, true, true);
+    public static void addChunk(ServerLevel level, Player owner, int x, int z) {
+        Set<ChunkPos> tickets = ENTITY_TICKETS.computeIfAbsent(owner.getUUID(), uuid -> new HashSet<>());
+        boolean add = tickets.add(new ChunkPos(x, z));
+
+        if (!add) {
+            return;
+        }
+
+        TICKET_CONTROLLER.forceChunk(level, owner, x, z, true, true);
     }
 
-    public static void removeAllChunk(UUID owner) {
-        ticketHelper.removeAllTickets(owner);
+    public static void removeAllChunk(ServerPlayer owner) {
+        Set<ChunkPos> tickets = ENTITY_TICKETS.get(owner.getUUID());
+
+        if (tickets == null) {
+            return;
+        }
+
+        for (ChunkPos ticket : tickets) {
+            TICKET_CONTROLLER.forceChunk(owner.level(), owner, ticket.x, ticket.z, false, true);
+        }
     }
 }

@@ -7,6 +7,7 @@ import cn.anecansaitin.freecameraapiaddition.network.CameraState;
 import cn.anecansaitin.freecameraapiaddition.network.CameraView;
 import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.core.SectionPos;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -15,7 +16,7 @@ import org.joml.Vector3f;
 
 import static cn.anecansaitin.freecameraapi.core.ModifierStates.*;
 
-@EventBusSubscriber(modid = FreeCameraApiAddition.MODID)
+@EventBusSubscriber(modid = FreeCameraApiAddition.MODID, value = Dist.CLIENT)
 public class CameraChunkLoader {
     public static final CameraChunkLoader INSTANCE = new CameraChunkLoader();
     private ClientChunkCache.Storage cameraStorage;

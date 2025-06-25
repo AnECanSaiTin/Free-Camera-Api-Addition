@@ -13,7 +13,7 @@ public class CameraAdditionConfig {
         CAMERA_CHUNK_LOAD_RADIUS =
                 BUILDER
                         .translation("config." + FreeCameraApiAddition.MODID + ".camera_chunk_loading_radius")
-                        .comment("  The max radius of the chunk loading area.", "  Directly take the minimum of the rendering distance and the maximum radius.", "  \"1\" indicates that the rendering distance is used as the standard.")
+                        .comment("  The max radius of the chunk loading area.", "  Directly take the minimum of the rendering distance and the maximum radius.", "  \"1\" indicates the same as the rendering distance.")
                         .defineInRange("camera_chunk_loading_radius", 1, 1, 32);
 
         SPEC = BUILDER.build();

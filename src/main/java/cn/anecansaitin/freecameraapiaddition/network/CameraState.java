@@ -32,7 +32,7 @@ public record CameraState(boolean enable, boolean update) implements CustomPacke
         data.updateState(pack.enable, pack.update);
 
         if (!pack.enable && pack.update) {
-            CameraTicketController.removeAllChunk(player.getUUID());
+            CameraTicketController.removeAllChunk((ServerPlayer) player);
             ((ServerLevel) player.level()).getChunkSource().chunkMap.move((ServerPlayer) player);
         }
     }
