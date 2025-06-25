@@ -1,10 +1,10 @@
-package cn.anecansaitin.freecameraapiaddition.network;
+package cn.anecansaitin.free_camera_api_tripod.network;
 
-import cn.anecansaitin.freecameraapiaddition.CameraAdditionConfig;
-import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraTicketController;
-import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
-import cn.anecansaitin.freecameraapiaddition.attachment.CameraData;
-import cn.anecansaitin.freecameraapiaddition.attachment.ModAttachment;
+import cn.anecansaitin.free_camera_api_tripod.CameraAdditionConfig;
+import cn.anecansaitin.free_camera_api_tripod.core.chunk_loader.CameraTicketController;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.attachment.CameraData;
+import cn.anecansaitin.free_camera_api_tripod.attachment.ModAttachment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

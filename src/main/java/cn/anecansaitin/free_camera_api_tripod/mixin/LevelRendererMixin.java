@@ -1,6 +1,6 @@
-package cn.anecansaitin.freecameraapiaddition.mixin;
+package cn.anecansaitin.free_camera_api_tripod.mixin;
 
-import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraChunkLoader;
+import cn.anecansaitin.free_camera_api_tripod.core.chunk_loader.CameraChunkLoader;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;

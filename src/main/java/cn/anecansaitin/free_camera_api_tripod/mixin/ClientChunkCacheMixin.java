@@ -1,7 +1,7 @@
-package cn.anecansaitin.freecameraapiaddition.mixin;
+package cn.anecansaitin.free_camera_api_tripod.mixin;
 
-import cn.anecansaitin.freecameraapiaddition.CameraAdditionConfig;
-import cn.anecansaitin.freecameraapiaddition.core.chunk_loader.CameraChunkLoader;
+import cn.anecansaitin.free_camera_api_tripod.CameraAdditionConfig;
+import cn.anecansaitin.free_camera_api_tripod.core.chunk_loader.CameraChunkLoader;
 import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;

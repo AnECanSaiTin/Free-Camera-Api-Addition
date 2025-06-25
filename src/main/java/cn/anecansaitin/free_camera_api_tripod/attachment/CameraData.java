@@ -1,4 +1,4 @@
-package cn.anecansaitin.freecameraapiaddition.attachment;
+package cn.anecansaitin.free_camera_api_tripod.attachment;
 
 import net.minecraft.server.level.ChunkTrackingView;
 import net.minecraft.world.level.ChunkPos;

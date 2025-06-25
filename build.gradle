@@ -20,6 +20,18 @@ group = mod_group_id
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
     mavenLocal()
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 base {
@@ -113,7 +125,8 @@ configurations {
 }
 
 dependencies {
-    implementation files("libs/free_camera_api-neo-1.21.6-3.0.2.jar")
+//    implementation files("libs/free_camera_api-neo-1.21.6-3.0.2.jar")
+    implementation "maven.modrinth:free-camera-api:3.0.2"
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -141,16 +154,17 @@ dependencies {
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
-            mod_id                 : mod_id,
-            mod_name               : mod_name,
-            mod_license            : mod_license,
-            mod_version            : mod_version,
-            mod_authors            : mod_authors,
-            mod_description        : mod_description
+            minecraft_version            : minecraft_version,
+            minecraft_version_range      : minecraft_version_range,
+            neo_version                  : neo_version,
+            neo_version_range            : neo_version_range,
+            mod_id                       : mod_id,
+            mod_name                     : mod_name,
+            mod_license                  : mod_license,
+            mod_version                  : mod_version,
+            mod_authors                  : mod_authors,
+            mod_description              : mod_description,
+            free_camera_api_version_range: free_camera_api_version_range
     ]
     inputs.properties replaceProperties
     expand replaceProperties

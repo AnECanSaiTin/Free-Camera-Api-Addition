@@ -1,4 +1,4 @@
-package cn.anecansaitin.freecameraapiaddition;
+package cn.anecansaitin.free_camera_api_tripod;
 
 import cn.anecansaitin.freecameraapi.api.CameraPlugin;
 import cn.anecansaitin.freecameraapi.api.ICameraPlugin;

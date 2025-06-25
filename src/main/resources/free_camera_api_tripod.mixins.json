@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "cn.anecansaitin.freecameraapiaddition.mixin",
+  "package": "cn.anecansaitin.free_camera_api_tripod.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ChunkMapMixin",

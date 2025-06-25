@@ -1,4 +1,4 @@
-package cn.anecansaitin.freecameraapiaddition;
+package cn.anecansaitin.free_camera_api_tripod;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

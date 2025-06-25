@@ -1,6 +1,6 @@
-package cn.anecansaitin.freecameraapiaddition.core.chunk_loader;
+package cn.anecansaitin.free_camera_api_tripod.core.chunk_loader;
 
-import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

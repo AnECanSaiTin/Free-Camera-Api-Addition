@@ -1,6 +1,6 @@
-package cn.anecansaitin.freecameraapiaddition.attachment;
+package cn.anecansaitin.free_camera_api_tripod.attachment;
 
-import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

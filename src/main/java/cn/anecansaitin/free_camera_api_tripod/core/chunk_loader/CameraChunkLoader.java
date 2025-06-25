@@ -1,10 +1,10 @@
-package cn.anecansaitin.freecameraapiaddition.core.chunk_loader;
+package cn.anecansaitin.free_camera_api_tripod.core.chunk_loader;
 
 import cn.anecansaitin.freecameraapi.core.ModifierManager;
-import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
-import cn.anecansaitin.freecameraapiaddition.network.CameraPos;
-import cn.anecansaitin.freecameraapiaddition.network.CameraState;
-import cn.anecansaitin.freecameraapiaddition.network.CameraView;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.network.CameraPos;
+import cn.anecansaitin.free_camera_api_tripod.network.CameraState;
+import cn.anecansaitin.free_camera_api_tripod.network.CameraView;
 import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.core.SectionPos;
 import net.neoforged.api.distmarker.Dist;

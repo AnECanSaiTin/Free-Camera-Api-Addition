@@ -1,6 +1,6 @@
-package cn.anecansaitin.freecameraapiaddition.network;
+package cn.anecansaitin.free_camera_api_tripod.network;
 
-import cn.anecansaitin.freecameraapiaddition.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
