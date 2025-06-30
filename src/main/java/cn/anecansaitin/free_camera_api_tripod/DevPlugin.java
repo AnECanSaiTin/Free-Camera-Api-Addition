@@ -1,9 +1,6 @@
 package cn.anecansaitin.free_camera_api_tripod;
 
-import cn.anecansaitin.freecameraapi.api.CameraPlugin;
-import cn.anecansaitin.freecameraapi.api.ICameraPlugin;
-import cn.anecansaitin.freecameraapi.api.ICameraModifier;
-import cn.anecansaitin.freecameraapi.api.ModifierPriority;
+import cn.anecansaitin.freecameraapi.api.*;
 
 @CameraPlugin(value = "dev", priority = ModifierPriority.LOWEST)
 public class DevPlugin implements ICameraPlugin {
@@ -16,14 +13,15 @@ public class DevPlugin implements ICameraPlugin {
                 .enablePos()
                 .enableRotation()
                 .enableGlobalMode()
-                .enableChunkLoader();
+                .asExtension()
+                .setControlScheme(ControlScheme.CAMERA_RELATIVE);
     }
 
     @Override
     public void update() {
         modifier
-                .disable()
-                .setPos(-100, 80, -314)
-                .setRotationYXZ(90, 180, 0);
+                .enable()
+                .setToVanilla()
+                .rotateYXZ(0, 20, 0);
     }
 }

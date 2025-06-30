@@ -1,7 +1,7 @@
-package cn.anecansaitin.free_camera_api_tripod.network;
+package cn.anecansaitin.free_camera_api_tripod.network.chunk_loader;
 
-import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
-import cn.anecansaitin.free_camera_api_tripod.attachment.CameraData;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiTripod;
+import cn.anecansaitin.free_camera_api_tripod.attachment.chunk_loader.CameraData;
 import cn.anecansaitin.free_camera_api_tripod.attachment.ModAttachment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CameraPos(float x, float y, float z) implements CustomPacketPayload {
-    public static final Type<CameraPos> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FreeCameraApiAddition.MODID, "camera_pos"));
+    public static final Type<CameraPos> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FreeCameraApiTripod.MODID, "camera_pos"));
     public static final StreamCodec<ByteBuf, CameraPos> CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, (pack) -> pack.x,
             ByteBufCodecs.FLOAT, (pack) -> pack.y,

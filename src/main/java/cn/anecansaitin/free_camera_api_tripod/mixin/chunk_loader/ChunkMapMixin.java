@@ -1,6 +1,6 @@
-package cn.anecansaitin.free_camera_api_tripod.mixin;
+package cn.anecansaitin.free_camera_api_tripod.mixin.chunk_loader;
 
-import cn.anecansaitin.free_camera_api_tripod.attachment.CameraData;
+import cn.anecansaitin.free_camera_api_tripod.attachment.chunk_loader.CameraData;
 import cn.anecansaitin.free_camera_api_tripod.attachment.ModAttachment;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;

@@ -1,8 +1,8 @@
-package cn.anecansaitin.free_camera_api_tripod.network;
+package cn.anecansaitin.free_camera_api_tripod.network.chunk_loader;
 
 import cn.anecansaitin.free_camera_api_tripod.core.chunk_loader.CameraTicketController;
-import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
-import cn.anecansaitin.free_camera_api_tripod.attachment.CameraData;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiTripod;
+import cn.anecansaitin.free_camera_api_tripod.attachment.chunk_loader.CameraData;
 import cn.anecansaitin.free_camera_api_tripod.attachment.ModAttachment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CameraState(boolean enable, boolean update) implements CustomPacketPayload {
-    public static final Type<CameraState> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FreeCameraApiAddition.MODID, "camera_state"));
+    public static final Type<CameraState> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FreeCameraApiTripod.MODID, "camera_state"));
     public static final StreamCodec<ByteBuf, CameraState> CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL, (pack) -> pack.enable,
             ByteBufCodecs.BOOL, (pack) -> pack.update,

@@ -1,12 +1,15 @@
 package cn.anecansaitin.free_camera_api_tripod.network;
 
-import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiTripod;
+import cn.anecansaitin.free_camera_api_tripod.network.chunk_loader.CameraPos;
+import cn.anecansaitin.free_camera_api_tripod.network.chunk_loader.CameraState;
+import cn.anecansaitin.free_camera_api_tripod.network.chunk_loader.CameraView;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-@EventBusSubscriber(modid = FreeCameraApiAddition.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FreeCameraApiTripod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModPayload {
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {

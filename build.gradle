@@ -125,8 +125,8 @@ configurations {
 }
 
 dependencies {
-//    implementation files("libs/free_camera_api-neo-1.21.6-3.0.2.jar")
-    implementation "maven.modrinth:free-camera-api:3.0.2"
+    implementation files("libs/free_camera_api-neo-1.21.6-3.1.0.jar")
+//    implementation "maven.modrinth:free-camera-api:3.0.2"
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

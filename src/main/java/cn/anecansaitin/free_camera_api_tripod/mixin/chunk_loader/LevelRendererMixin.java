@@ -1,4 +1,4 @@
-package cn.anecansaitin.free_camera_api_tripod.mixin;
+package cn.anecansaitin.free_camera_api_tripod.mixin.chunk_loader;
 
 import cn.anecansaitin.free_camera_api_tripod.core.chunk_loader.CameraChunkLoader;
 import com.llamalad7.mixinextras.sugar.Local;

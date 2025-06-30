@@ -7,10 +7,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(value = FreeCameraApiAddition.MODID, dist = Dist.CLIENT)
-public class FreeCameraApiAdditionClient {
+@Mod(value = FreeCameraApiTripod.MODID, dist = Dist.CLIENT)
+public class FreeCameraApiTripodClient {
 
-    public FreeCameraApiAdditionClient(IEventBus modEventBus, ModContainer modContainer) {
+    public FreeCameraApiTripodClient(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 }

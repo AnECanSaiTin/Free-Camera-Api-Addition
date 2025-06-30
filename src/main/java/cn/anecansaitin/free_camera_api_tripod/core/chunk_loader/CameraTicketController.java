@@ -1,6 +1,6 @@
 package cn.anecansaitin.free_camera_api_tripod.core.chunk_loader;
 
-import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiAddition;
+import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiTripod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,9 +13,9 @@ import net.neoforged.neoforge.common.world.chunk.TicketController;
 
 import java.util.*;
 
-@EventBusSubscriber(modid = FreeCameraApiAddition.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FreeCameraApiTripod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class CameraTicketController {
-    public static final TicketController TICKET_CONTROLLER = new TicketController(ResourceLocation.fromNamespaceAndPath(FreeCameraApiAddition.MODID, "camera_chunk"), (level, helper) -> {
+    public static final TicketController TICKET_CONTROLLER = new TicketController(ResourceLocation.fromNamespaceAndPath(FreeCameraApiTripod.MODID, "camera_chunk"), (level, helper) -> {
         for (UUID uuid : helper.getEntityTickets().keySet()) {
             helper.removeAllTickets(uuid);
         }
