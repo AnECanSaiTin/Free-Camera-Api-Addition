@@ -10,7 +10,8 @@
   ],
   "client": [
     "chunk_loader.ClientChunkCacheMixin",
-    "chunk_loader.LevelRendererMixin"
+    "chunk_loader.LevelRendererMixin",
+    "control_scheme.MouseHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

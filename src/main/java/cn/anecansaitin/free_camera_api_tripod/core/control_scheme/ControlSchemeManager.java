@@ -1,7 +1,7 @@
 package cn.anecansaitin.free_camera_api_tripod.core.control_scheme;
 
 import cn.anecansaitin.free_camera_api_tripod.FreeCameraApiTripod;
-import cn.anecansaitin.freecameraapi.api.ControlScheme;
+import cn.anecansaitin.freecameraapi.api.extension.ControlScheme;
 import cn.anecansaitin.freecameraapi.core.ModifierManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.ClientInput;
@@ -13,10 +13,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import org.joml.Vector2i;
 
+import static cn.anecansaitin.freecameraapi.api.extension.ControlScheme.*;
 import static cn.anecansaitin.freecameraapi.core.ModifierStates.ENABLE;
 
 @EventBusSubscriber(modid = FreeCameraApiTripod.MODID)
-public class OnMovementInputUpdate {
+public class ControlSchemeManager {
     private static final Vector2i VEC2 = new Vector2i();
     private static final Vec2 FORWARD = new Vec2(0, 1);
     private static final Vec2 BACKWARD = new Vec2(0, -1);
@@ -35,9 +36,9 @@ public class OnMovementInputUpdate {
         ClientInput input = event.getInput();
 
         switch (controlScheme) {
-            case CAMERA_RELATIVE -> cameraRelative(input, manager);
-            case PLAYER_RELATIVE -> playerRelative(input, manager);
-            case null, default -> {
+            case CAMERA_RELATIVE cameraRelative -> cameraRelative(input, manager);
+            case PLAYER_RELATIVE playerRelative -> playerRelative(input, playerRelative.angle());
+            case VANILLA vanilla -> {
             }
         }
     }
@@ -58,11 +59,11 @@ public class OnMovementInputUpdate {
         input.moveVector = FORWARD;
     }
 
-    private static void playerRelative(ClientInput input, ModifierManager manager) {
+    private static void playerRelative(ClientInput input, int angle) {
         Input keyPresses = input.keyPresses;
         calculateImpulse(keyPresses);
         LocalPlayer player = Minecraft.getInstance().player;
-        player.setYRot(VEC2.x * -5 + player.getYRot(Minecraft.getInstance().gameRenderer.getMainCamera().getPartialTickTime()));
+        player.setYRot(VEC2.x * -angle + player.getYRot(Minecraft.getInstance().gameRenderer.getMainCamera().getPartialTickTime()));
 
         switch (VEC2.y) {
             case -1 -> input.moveVector = BACKWARD;

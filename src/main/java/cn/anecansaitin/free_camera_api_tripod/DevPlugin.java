@@ -1,6 +1,7 @@
 package cn.anecansaitin.free_camera_api_tripod;
 
 import cn.anecansaitin.freecameraapi.api.*;
+import cn.anecansaitin.freecameraapi.api.extension.ControlScheme;
 
 @CameraPlugin(value = "dev", priority = ModifierPriority.LOWEST)
 public class DevPlugin implements ICameraPlugin {
@@ -13,7 +14,7 @@ public class DevPlugin implements ICameraPlugin {
                 .enablePos()
                 .enableRotation()
                 .asExtension()
-                .setControlScheme(ControlScheme.PLAYER_RELATIVE);
+                .setControlScheme(ControlScheme.PLAYER_RELATIVE(10));
     }
 
     @Override
