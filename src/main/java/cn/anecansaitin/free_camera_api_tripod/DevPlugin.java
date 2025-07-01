@@ -12,16 +12,15 @@ public class DevPlugin implements ICameraPlugin {
         modifier.disable()
                 .enablePos()
                 .enableRotation()
-                .enableGlobalMode()
                 .asExtension()
-                .setControlScheme(ControlScheme.CAMERA_RELATIVE);
+                .setControlScheme(ControlScheme.PLAYER_RELATIVE);
     }
 
     @Override
     public void update() {
         modifier
                 .enable()
-                .setToVanilla()
-                .rotateYXZ(0, 20, 0);
+                .setPos(0,3,-2)
+                .setRotationYXZ(45,0,0);
     }
 }
