@@ -28,7 +28,7 @@ public class ControlSchemeManager {
     public static void onMovementInputUpdate(MovementInputUpdateEvent event) {
         ModifierManager manager = ModifierManager.INSTANCE;
 
-        if (!manager.isStateEnabledAnd(ENABLE)) {
+        if (!manager.isStateEnabledAnd(ENABLE) || Minecraft.getInstance().player.isPassenger()) {
             return;
         }
 
