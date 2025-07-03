@@ -20,11 +20,11 @@ public class DevPlugin implements ICameraPlugin {
 
     @Override
     public void update() {
-//        Minecraft.getInstance().mouseHandler.releaseMouse();
         modifier
-                .disable()
-//                .enable()
-                .setPos(0,3,-2)
-                .setRotationYXZ(45,0,0);
+//                .disable()
+                .enable()
+                .setPos(0,5,0)
+                .setRotationYXZ(90,0,0)
+                .move(0,0,-5);
     }
 }
