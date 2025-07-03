@@ -1,20 +1,17 @@
 package cn.anecansaitin.free_camera_api_tripod.mixin.control_scheme;
 
-import cn.anecansaitin.free_camera_api_tripod.core.control_scheme.MouseManager;
-import cn.anecansaitin.freecameraapi.api.extension.ControlScheme;
+import cn.anecansaitin.free_camera_api_tripod.core.control_scheme.ControlSchemeManager;
 import cn.anecansaitin.freecameraapi.core.ModifierManager;
 import cn.anecansaitin.freecameraapi.core.ModifierStates;
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static cn.anecansaitin.freecameraapi.api.extension.ControlScheme.*;
 
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
@@ -27,13 +24,14 @@ public abstract class MouseHandlerMixin {
         }
 
         switch (manager.controlScheme()) {
-            case ControlScheme.PLAYER_RELATIVE playerRelative -> ci.cancel();
+            case PLAYER_RELATIVE playerRelative -> ci.cancel();
+            case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> ci.cancel();
             default -> {}
         }
     }
 
     @Inject(method = "onMove", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseHandler;accumulatedDX:D", opcode = Opcodes.GETFIELD))
     public void freeCameraAPI$onMove(long windowPointer, double xpos, double ypos, CallbackInfo ci) {
-        MouseManager.mouseMove(xpos, ypos);
+        ControlSchemeManager.mouseMove();
     }
 }

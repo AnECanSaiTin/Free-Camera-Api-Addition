@@ -15,7 +15,7 @@ public class DevPlugin implements ICameraPlugin {
                 .enablePos()
                 .enableRotation()
                 .asExtension()
-                .setControlScheme(ControlScheme.PLAYER_RELATIVE(10));
+                .setControlScheme(ControlScheme.PLAYER_RELATIVE_STRAFE);
     }
 
     @Override
