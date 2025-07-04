@@ -31,7 +31,7 @@ import static cn.anecansaitin.freecameraapi.core.ModifierStates.ENABLE;
 
 @EventBusSubscriber(modid = FreeCameraApiTripod.MODID, value = Dist.CLIENT)
 public class ControlSchemeManager {
-    //region 控制模式转换
+    // region 控制模式转换
     private static final Vector2i VEC2 = new Vector2i();
     private static final Vec2 FORWARD = new Vec2(0, 1);
     private static final Vec2 BACKWARD = new Vec2(0, -1);
@@ -53,7 +53,8 @@ public class ControlSchemeManager {
             case CAMERA_RELATIVE cameraRelative -> cameraRelative(input, manager);
             case PLAYER_RELATIVE playerRelative -> playerRelative(input, playerRelative.angle());
             case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> mouseMove();
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -89,7 +90,7 @@ public class ControlSchemeManager {
     private static void calculateImpulse(Input keyPress) {
         VEC2.set(keyPress.left() == keyPress.right() ? 0 : (keyPress.left() ? 1 : -1), keyPress.forward() == keyPress.backward() ? 0 : (keyPress.forward() ? 1 : -1));
     }
-    //endregion
+    // endregion
 
     // region 鼠标控制设置
     private static final Vector3f VEC3 = new Vector3f();
@@ -104,14 +105,21 @@ public class ControlSchemeManager {
             return;
         }
 
-//        Vec3 vec3 = pickBlock();
-//
-//        if (vec3 != null) {
-//
-//        }
-
         mc.mouseHandler.releaseMouse();
-        event.setCanceled(true);
+        Vector3f blockPos = pickBlock();
+
+        if (blockPos != null) {
+            Vector3f playerPos = mc.player.position().toVector3f();
+            Vector3f direction = blockPos.sub(playerPos).normalize();
+
+            float yaw = (float) (Mth.atan2(direction.z, direction.x) * Mth.RAD_TO_DEG - 90);
+
+            float horizontalLength = Mth.sqrt(direction.x * direction.x + direction.z * direction.z);
+            float pitch = (float) (Mth.atan2(direction.y, horizontalLength) * Mth.RAD_TO_DEG - 90);
+
+            mc.player.setYRot(yaw);
+            mc.player.setXRot(pitch);
+        }
     }
 
     public static void mouseMove() {
@@ -127,22 +135,20 @@ public class ControlSchemeManager {
         Vector3f playerPos = player.position().toVector3f();
         player.displayClientMessage(Component.literal("Mouse Pos: " + mousePos.x + ", " + mousePos.y + ", " + mousePos.z), true);
         Vector3f direction = mousePos.sub(playerPos).normalize();
-//        Quaternionf rotation = new Quaternionf().lookAlong(direction, Mth.Y_AXIS);
         float yaw = (float) (Mth.atan2(direction.z, direction.x) * Mth.RAD_TO_DEG - 90);
         player.setYRot(yaw);
+        player.setXRot(0);
     }
 
-    private static Vec3 pickBlock() {
+    private static Vector3f pickBlock() {
         Minecraft mc = Minecraft.getInstance();
         ModifierManager manager = ModifierManager.INSTANCE;
-        Vector3f worldDir = getMouseRay();
-        Vector3f cameraPos = manager.pos();
-        Vec3 start = new Vec3(cameraPos.x, cameraPos.y, cameraPos.z);
-        Vec3 end = start.add(worldDir.x * 10, worldDir.y * 10, worldDir.z * 10);
-        BlockHitResult clip = mc.level.clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, mc.player));
+        Vector3f start = manager.pos();
+        Vector3f end = getMousePosInWorld();
+        BlockHitResult clip = mc.level.clip(new ClipContext(new Vec3(start), new Vec3(end), ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, mc.player));
 
         if (clip.getType() != HitResult.Type.MISS) {
-            return clip.getLocation();
+            return clip.getLocation().toVector3f();
         }
 
         return null;
@@ -153,7 +159,7 @@ public class ControlSchemeManager {
         Minecraft mc = Minecraft.getInstance();
 
         if (Math.abs(mouseRay.y) < 1e-6f) {
-            return mc.player.position().toVector3f();
+            return mc.player.position().toVector3f().add(mouseRay.mul(100));
         }
 
         Vector3f cameraPos = ModifierManager.INSTANCE.pos();
@@ -168,27 +174,26 @@ public class ControlSchemeManager {
         Window window = mc.getWindow();
         int screenWidth = window.getScreenWidth();
         int screenHeight = window.getScreenHeight();
-        float ndcX = (float) -((2 * mc.mouseHandler.xpos() / screenWidth) - 1);
+        float ndcX = (float) ((2 * mc.mouseHandler.xpos() / screenWidth) - 1);
         float ndcY = (float) (1 - (2 * mc.mouseHandler.ypos() / screenHeight));
         float aspect = (float) screenWidth / screenHeight;
-        float fovRad = (float) Math.toRadians(manager.fov());
+        float fovRad = manager.fov() * Mth.DEG_TO_RAD;
         float tanHalfFovY = (float) Math.tan(fovRad / 2.0f);
 
-        Vector3f cameraDir = new Vector3f(
-                ndcX * tanHalfFovY * aspect,
+        Vector3f ray = new Vector3f(
+                -ndcX * tanHalfFovY * aspect, // 因为右手坐标系，x轴左正，右负，因此需要乘以-1
                 ndcY * tanHalfFovY,
                 1.0f
         );
 
-        Quaternionf cameraRotation = new Quaternionf();
-        Vector3f rot = manager.rot();
-        cameraRotation.rotateYXZ(-Mth.DEG_TO_RAD * rot.y, Mth.DEG_TO_RAD * rot.x, Mth.DEG_TO_RAD * rot.z);
-
         // 变换到世界空间方向
-        Vector3f worldDir = new Vector3f(cameraDir);
-        cameraRotation.transform(worldDir);
-        worldDir.normalize();
-        return worldDir;
+        Vector3f cameraRot = manager.rot();
+        ray.rotateY(cameraRot.y * Mth.DEG_TO_RAD)
+                .rotateX(cameraRot.x * Mth.DEG_TO_RAD)
+                .rotateZ(cameraRot.z * Mth.DEG_TO_RAD);
+
+        ray.normalize();
+        return ray;
     }
     // endregion
 }

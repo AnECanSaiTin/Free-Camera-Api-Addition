@@ -1,8 +1,11 @@
 package cn.anecansaitin.free_camera_api_tripod.mixin.control_scheme;
 
 import cn.anecansaitin.free_camera_api_tripod.core.control_scheme.ControlSchemeManager;
+import cn.anecansaitin.freecameraapi.api.extension.ControlScheme;
 import cn.anecansaitin.freecameraapi.core.ModifierManager;
 import cn.anecansaitin.freecameraapi.core.ModifierStates;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.objectweb.asm.Opcodes;
@@ -33,5 +36,21 @@ public abstract class MouseHandlerMixin {
     @Inject(method = "onMove", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseHandler;accumulatedDX:D", opcode = Opcodes.GETFIELD))
     public void freeCameraAPI$onMove(long windowPointer, double xpos, double ypos, CallbackInfo ci) {
         ControlSchemeManager.mouseMove();
+    }
+
+    @WrapOperation(method = "onPress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;grabMouse()V"))
+    public void freeCameraAPI$onPress(MouseHandler instance, Operation<Void> original) {
+        ModifierManager manager = ModifierManager.INSTANCE;
+
+        if (!manager.isStateEnabledOr(ModifierStates.ENABLE)) {
+            original.call(instance);
+            return;
+        }
+
+        switch (manager.controlScheme()) {
+            case PLAYER_RELATIVE playerRelative -> {}
+            case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> {}
+            default -> original.call(instance);
+        }
     }
 }

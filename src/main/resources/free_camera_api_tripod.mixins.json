@@ -11,7 +11,7 @@
   "client": [
     "chunk_loader.ClientChunkCacheMixin",
     "chunk_loader.LevelRendererMixin",
-    "control_scheme.GameRendererMixin",
+    "control_scheme.MinecraftMixin",
     "control_scheme.MouseHandlerMixin"
   ],
   "injectors": {

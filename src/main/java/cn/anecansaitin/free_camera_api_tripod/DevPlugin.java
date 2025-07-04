@@ -2,7 +2,6 @@ package cn.anecansaitin.free_camera_api_tripod;
 
 import cn.anecansaitin.freecameraapi.api.*;
 import cn.anecansaitin.freecameraapi.api.extension.ControlScheme;
-import net.minecraft.client.Minecraft;
 
 @CameraPlugin(value = "dev", priority = ModifierPriority.LOWEST)
 public class DevPlugin implements ICameraPlugin {
@@ -23,8 +22,10 @@ public class DevPlugin implements ICameraPlugin {
         modifier
 //                .disable()
                 .enable()
-                .setPos(0,5,0)
+//                .setPos(4,5,-4)
+//                .setRotationYXZ(45,45,0)
+                .setPos(0,5,1)
                 .setRotationYXZ(90,0,0)
-                .move(0,0,-5);
+                ;
     }
 }
