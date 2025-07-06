@@ -13,7 +13,7 @@ import net.neoforged.neoforge.common.world.chunk.TicketController;
 
 import java.util.*;
 
-@EventBusSubscriber(modid = FreeCameraApiTripod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = FreeCameraApiTripod.MODID)
 public class CameraTicketController {
     public static final TicketController TICKET_CONTROLLER = new TicketController(ResourceLocation.fromNamespaceAndPath(FreeCameraApiTripod.MODID, "camera_chunk"), (level, helper) -> {
         for (UUID uuid : helper.getEntityTickets().keySet()) {

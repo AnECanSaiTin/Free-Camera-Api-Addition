@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Vector3f;
 
@@ -40,7 +41,7 @@ public class CameraChunkLoader {
         if (!manager.isStateEnabledAnd(CHUNK_LOADER | ENABLE)) {
             if (chunkLoaderPrepared) {
                 chunkLoaderPrepared = false;
-                PacketDistributor.sendToServer(new CameraState(false, true));
+                ClientPacketDistributor.sendToServer(new CameraState(false, true));
                 cameraStorage.viewCenterX = Integer.MAX_VALUE;
                 cameraStorage.viewCenterZ = Integer.MAX_VALUE;
             }
@@ -51,7 +52,7 @@ public class CameraChunkLoader {
         Vector3f pos = manager.pos();
 
         if (!chunkLoaderPrepared) {
-            PacketDistributor.sendToServer(
+            ClientPacketDistributor.sendToServer(
                     new CameraState(true, true),
                     new CameraPos(pos.x, pos.y, pos.z),
                     new CameraView(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z))
@@ -66,13 +67,13 @@ public class CameraChunkLoader {
         int nvz = SectionPos.blockToSectionCoord(pos.z);
 
         if (vx == nvx && vz == nvz) {
-            PacketDistributor.sendToServer(new CameraPos(pos.x, pos.y, pos.z));
+            ClientPacketDistributor.sendToServer(new CameraPos(pos.x, pos.y, pos.z));
             return;
         }
 
         cameraStorage.viewCenterX = nvx;
         cameraStorage.viewCenterZ = nvz;
-        PacketDistributor.sendToServer(new CameraView(nvx, nvz));
+        ClientPacketDistributor.sendToServer(new CameraView(nvx, nvz));
     }
 
     @SubscribeEvent
