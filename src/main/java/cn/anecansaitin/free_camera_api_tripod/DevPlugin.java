@@ -24,8 +24,7 @@ public class DevPlugin implements ICameraPlugin {
                 .enable()
 //                .setPos(4,5,-4)
 //                .setRotationYXZ(45,45,0)
-                .setPos(0,5,1)
-                .setRotationYXZ(90,0,0)
-                ;
+                .setPos(5,5,-5)
+                .setRotationYXZ(45,45,0);
     }
 }

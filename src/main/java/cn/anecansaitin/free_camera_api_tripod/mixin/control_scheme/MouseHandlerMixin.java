@@ -27,6 +27,7 @@ public abstract class MouseHandlerMixin {
         }
 
         switch (manager.controlScheme()) {
+            case CAMERA_RELATIVE_STRAFE cameraRelativeStrafe -> ci.cancel();
             case PLAYER_RELATIVE playerRelative -> ci.cancel();
             case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> ci.cancel();
             default -> {}
@@ -48,6 +49,7 @@ public abstract class MouseHandlerMixin {
         }
 
         switch (manager.controlScheme()) {
+            case CAMERA_RELATIVE_STRAFE cameraRelativeStrafe -> {}
             case PLAYER_RELATIVE playerRelative -> {}
             case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> {}
             default -> original.call(instance);

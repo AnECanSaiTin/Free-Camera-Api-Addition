@@ -8,23 +8,22 @@ import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.ClientInput;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
+
+import java.util.Optional;
 
 import static cn.anecansaitin.freecameraapi.api.extension.ControlScheme.*;
 import static cn.anecansaitin.freecameraapi.core.ModifierStates.ENABLE;
@@ -51,6 +50,7 @@ public class ControlSchemeManager {
 
         switch (controlScheme) {
             case CAMERA_RELATIVE cameraRelative -> cameraRelative(input, manager);
+            case CAMERA_RELATIVE_STRAFE cameraRelativeStrafe -> cameraRelativeStrafe(input, manager);
             case PLAYER_RELATIVE playerRelative -> playerRelative(input, playerRelative.angle());
             case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> mouseMove();
             default -> {
@@ -72,6 +72,25 @@ public class ControlSchemeManager {
         Minecraft.getInstance().player.setYRot(yRot + angle);
         input.keyPresses = new Input(true, false, false, false, keyPresses.jump(), keyPresses.shift(), keyPresses.sprint());
         input.moveVector = FORWARD;
+    }
+
+    private static void cameraRelativeStrafe(ClientInput input, ModifierManager manager) {
+        mouseMove();
+
+        Input keyPresses = input.keyPresses;
+        float yRot = manager.rot().y;
+        calculateImpulse(keyPresses);
+
+        if (VEC2.lengthSquared() <= 0) {
+            return;
+        }
+
+        int angle = ANGLES[VEC2.x + 1][VEC2.y + 1];
+        yRot += angle;
+        Minecraft mc = Minecraft.getInstance();
+        float playerYRot = mc.player.getYRot();
+        float yRotDelta = (playerYRot - yRot) * Mth.DEG_TO_RAD;
+        input.moveVector = new Vec2(Mth.sin(yRotDelta), Mth.cos(yRotDelta));
     }
 
     private static void playerRelative(ClientInput input, int angle) {
@@ -105,20 +124,10 @@ public class ControlSchemeManager {
             return;
         }
 
-        mc.mouseHandler.releaseMouse();
-        Vector3f blockPos = pickBlock();
-
-        if (blockPos != null) {
-            Vector3f playerPos = mc.player.position().toVector3f();
-            Vector3f direction = blockPos.sub(playerPos).normalize();
-
-            float yaw = (float) (Mth.atan2(direction.z, direction.x) * Mth.RAD_TO_DEG - 90);
-
-            float horizontalLength = Mth.sqrt(direction.x * direction.x + direction.z * direction.z);
-            float pitch = (float) (Mth.atan2(direction.y, horizontalLength) * Mth.RAD_TO_DEG - 90);
-
-            mc.player.setYRot(yaw);
-            mc.player.setXRot(pitch);
+        switch (manager.controlScheme()) {
+            case CAMERA_RELATIVE_STRAFE cameraRelativeStrafe -> mc.mouseHandler.releaseMouse();
+            case PLAYER_RELATIVE_STRAFE playerRelativeStrafe -> mc.mouseHandler.releaseMouse();
+            case null, default -> {}
         }
     }
 
@@ -130,26 +139,54 @@ public class ControlSchemeManager {
             return;
         }
 
-        LocalPlayer player = mc.player;
-        Vector3f mousePos = getMousePosInWorld();
-        Vector3f playerPos = player.position().toVector3f();
-        player.displayClientMessage(Component.literal("Mouse Pos: " + mousePos.x + ", " + mousePos.y + ", " + mousePos.z), true);
-        Vector3f direction = mousePos.sub(playerPos).normalize();
-        float yaw = (float) (Mth.atan2(direction.z, direction.x) * Mth.RAD_TO_DEG - 90);
-        player.setYRot(yaw);
-        player.setXRot(0);
+        Vector3f blockPos = pick();
+
+        if (blockPos != null) {
+//            mc.player.displayClientMessage(Component.literal("Mouse Pos: " + blockPos.x + ", " + blockPos.y + ", " + blockPos.z), true);
+            Vector3f playerEyePos = mc.player.getEyePosition(mc.gameRenderer.getMainCamera().getPartialTickTime()).toVector3f();
+            Vector3f direction = blockPos.sub(playerEyePos).normalize();
+
+            float yaw = (float) (Mth.atan2(direction.z, direction.x) * Mth.RAD_TO_DEG - 90);
+
+            float horizontalLength = Mth.sqrt(direction.x * direction.x + direction.z * direction.z);
+            float pitch = (float) -(Mth.atan2(direction.y, horizontalLength) * Mth.RAD_TO_DEG);
+
+            mc.player.setYRot(yaw);
+            mc.player.setXRot(pitch);
+        }
     }
 
-    private static Vector3f pickBlock() {
+    private static Vector3f pick() {
         Minecraft mc = Minecraft.getInstance();
         ModifierManager manager = ModifierManager.INSTANCE;
         Vector3f start = manager.pos();
-        Vector3f end = getMousePosInWorld();
-        BlockHitResult clip = mc.level.clip(new ClipContext(new Vec3(start), new Vec3(end), ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, mc.player));
+        Vector3f playerPos = mc.player.position().toVector3f();
+        float length = playerPos.distance(start) + 50;
+        Vector3f mouseRay = getMouseRay();
+        Vector3f end = mouseRay.mul(length).add(start);
 
-        if (clip.getType() != HitResult.Type.MISS) {
-            return clip.getLocation().toVector3f();
+        //region 实体
+        AABB aabb = mc.player.getBoundingBox().inflate(mc.player.entityInteractionRange() + 1);
+
+        for (Entity entity : mc.level.getEntities(mc.player, aabb, EntitySelector.CAN_BE_PICKED)) {
+            AABB aabb1 = entity.getBoundingBox().inflate(entity.getPickRadius());
+            Optional<Vec3> optional = aabb1.clip(new Vec3(start), new Vec3(end));
+
+            if (optional.isEmpty()) {
+                continue;
+            }
+
+            return optional.get().toVector3f();
         }
+        //endregion
+
+        //region 方块
+        BlockHitResult blockHitResult = mc.level.clip(new ClipContext(new Vec3(start), new Vec3(end), ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, mc.player));
+
+        if (blockHitResult.getType() == HitResult.Type.BLOCK) {
+            return blockHitResult.getLocation().toVector3f();
+        }
+        //endregion
 
         return null;
     }
@@ -188,9 +225,9 @@ public class ControlSchemeManager {
 
         // 变换到世界空间方向
         Vector3f cameraRot = manager.rot();
-        ray.rotateY(cameraRot.y * Mth.DEG_TO_RAD)
+        ray.rotateZ(cameraRot.z * Mth.DEG_TO_RAD)
                 .rotateX(cameraRot.x * Mth.DEG_TO_RAD)
-                .rotateZ(cameraRot.z * Mth.DEG_TO_RAD);
+                .rotateY(-cameraRot.y * Mth.DEG_TO_RAD);
 
         ray.normalize();
         return ray;
